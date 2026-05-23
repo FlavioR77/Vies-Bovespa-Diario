@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viés do Ibovespa Diário — Apresentação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:          #0d0f0e;
+    --bg2:         #131615;
+    --bg3:         #181c1a;
+    --bg4:         #1e2421;
+    --card:        #161a18;
+    --border:      rgba(255,255,255,0.07);
+    --border-md:   rgba(255,255,255,0.11);
+    --text:        #e8ede9;
+    --muted:       #7a8a7e;
+    --faint:       #4a564e;
+
+    --green:       #2dbd8a;
+    --green-mid:   #52d4a4;
+    --green-dark:  #1a7a58;
+    --green-glow:  rgba(45,189,138,0.12);
+    --green-faint: rgba(45,189,138,0.06);
+
+    --red:         #e05252;
+    --red-bg:      rgba(224,82,82,0.1);
+    --pos:         #52c97a;
+    --pos-bg:      rgba(82,201,122,0.1);
+    --neu-bg:      rgba(255,255,255,0.05);
+    --amber:       #d4943a;
+    --amber-bg:    rgba(212,148,58,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,14,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--text); }
+  .nav-brand span { color: var(--green-mid); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-size: 0.76rem; color: var(--muted); text-decoration: none; letter-spacing: 0.4px; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--green-mid); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 6rem 2rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -120px; right: -120px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(45,189,138,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -80px; left: 5%;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(45,189,138,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(45,189,138,0.1); border: 1px solid rgba(45,189,138,0.25);
+    color: var(--green-mid); font-size: 0.66rem; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    color: var(--text); line-height: 1.1; margin-bottom: 0.8rem;
+  }
+  .hero h1 em { color: var(--green-mid); font-style: normal; }
+  .hero-lead { color: var(--muted); font-size: 1rem; font-weight: 300; max-width: 580px; line-height: 1.75; margin-bottom: 2.5rem; }
+  .hero-kpis { display: flex; gap: 10px; flex-wrap: wrap; }
+  .kpi { background: var(--bg4); border: 1px solid var(--border-md); border-radius: 10px; padding: 0.75rem 1.2rem; }
+  .kpi-val { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--green-mid); line-height: 1; }
+  .kpi-lbl { font-size: 0.66rem; color: var(--faint); margin-top: 3px; letter-spacing: 0.4px; }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 0; }
+  section.alt { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .sec-label {
+    font-family: 'Syne', sans-serif; font-size: 0.63rem; font-weight: 700;
+    letter-spacing: 3.5px; text-transform: uppercase; color: var(--green);
+    margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px;
+  }
+  .sec-label::after { content:''; flex:1; height:1px; background:var(--green-dark); opacity:.5; max-width:50px; }
+  .sec-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--text); margin-bottom: 0.8rem; line-height: 1.2; }
+  .sec-title em { color: var(--green-mid); font-style: normal; }
+  .sec-desc { color: var(--muted); font-size: 0.95rem; max-width: 560px; line-height: 1.75; margin-bottom: 2.5rem; }
+
+  /* ── CARDS ── */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:600px){ .card-grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; transition: border-color 0.2s; }
+  .card:hover { border-color: var(--border-md); }
+  .card.full { grid-column: 1 / -1; background: var(--green-faint); border-color: rgba(45,189,138,0.15); }
+  .card-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .card h3 { font-family:'Syne',sans-serif; font-size:.88rem; font-weight:700; color:var(--text); margin-bottom:.35rem; }
+  .card p  { font-size:.78rem; color:var(--muted); line-height:1.6; }
+  .card.full h3 { color: var(--green-mid); }
+  .card.full p  { color: rgba(82,212,164,0.65); }
+
+  .quote-block {
+    border-left: 2px solid var(--green-dark); padding: 1rem 1.5rem;
+    margin: 2rem 0; background: var(--green-faint); border-radius: 0 10px 10px 0;
+  }
+  .quote-block p { font-size:.98rem; color:var(--muted); line-height:1.7; font-style:italic; }
+
+  /* ── FLOW ── */
+  .flow { display: grid; grid-template-columns: repeat(4,1fr); margin-bottom: 3rem; }
+  @media(max-width:700px){ .flow { grid-template-columns: 1fr 1fr; } }
+  .flow-step { background: var(--card); border: 1px solid var(--border); padding: 1.4rem 1.2rem; position: relative; transition: border-color 0.2s; }
+  .flow-step:first-child { border-radius: 12px 0 0 12px; }
+  .flow-step:last-child  { border-radius: 0 12px 12px 0; }
+  .flow-step + .flow-step { border-left: none; }
+  .flow-step:hover { border-color: var(--green-dark); z-index:1; }
+  .flow-n { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:rgba(45,189,138,0.15); line-height:1; margin-bottom:.5rem; }
+  .flow-step h3 { font-size:.82rem; font-weight:500; color:var(--text); margin-bottom:.3rem; }
+  .flow-step p  { font-size:.73rem; color:var(--muted); line-height:1.55; }
+  .flow-arr {
+    position:absolute; right:-10px; top:50%; transform:translateY(-50%);
+    width:20px; height:20px; background:var(--green-dark);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    z-index:2; color:var(--green-mid); font-size:9px; font-weight:700;
+  }
+  .flow-step:last-child .flow-arr { display:none; }
+
+  .tech-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:1.2rem; }
+  .tp { background:var(--bg4); border:1px solid var(--border-md); border-radius:20px; padding:5px 14px; font-size:.73rem; color:var(--muted); }
+  .tp strong { color:var(--green-mid); }
+
+  /* ── VIÉS SHOWCASE ── */
+  .vies-showcase {
+    background: var(--bg4); border: 1px solid rgba(45,189,138,0.2);
+    border-radius: 16px; padding: 2rem 2.5rem;
+    display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;
+    margin-bottom: 2rem; position: relative; overflow: hidden;
+  }
+  .vies-showcase::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:200px; height:200px; border-radius:50%;
+    background:radial-gradient(circle, rgba(45,189,138,0.1) 0%, transparent 70%);
+  }
+  .vies-num { font-family:'Syne',sans-serif; font-size:5.5rem; font-weight:800; color:var(--green-mid); line-height:1; flex-shrink:0; text-shadow:0 0 40px rgba(45,189,138,0.3); }
+  .vies-info { flex:1; min-width:200px; position:relative; z-index:1; }
+  .vies-title { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:.5rem; }
+  .vies-why { font-size:.82rem; color:var(--muted); line-height:1.65; }
+  .escala { display:flex; gap:6px; flex-wrap:wrap; margin-top:1rem; }
+  .es { font-size:.66rem; padding:4px 12px; border-radius:10px; font-weight:500; letter-spacing:.3px; }
+  .es.on  { background:rgba(45,189,138,0.2); color:var(--green-mid); border:1px solid rgba(45,189,138,0.35); }
+  .es.off { background:var(--bg3); color:var(--faint); border:1px solid var(--border); }
+
+  /* ── TABELA ── */
+  .ativos-table { width:100%; border-collapse:collapse; font-size:.83rem; border-radius:14px; overflow:hidden; border:1px solid var(--border); }
+  .ativos-table thead tr { background:var(--bg4); }
+  .ativos-table th { text-align:left; padding:10px 16px; font-weight:500; color:var(--faint); font-size:.72rem; letter-spacing:.3px; }
+  .ativos-table td { padding:10px 16px; border-top:1px solid var(--border); color:var(--text); background:var(--card); }
+  .ativos-table tr:hover td { background:var(--bg4); }
+  .neg { color:#e05252; font-weight:500; }
+  .pos { color:#52c97a; font-weight:500; }
+  .neu { color:var(--muted); }
+
+  /* ── MANCHETES ── */
+  .manchete-list { display:flex; flex-direction:column; gap:8px; }
+  .manchete { display:flex; gap:12px; align-items:flex-start; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:.9rem 1.1rem; transition:border-color 0.2s; }
+  .manchete:hover { border-color:var(--border-md); }
+  .manchete-badge { flex-shrink:0; padding:3px 9px; border-radius:6px; font-size:.63rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+  .manchete-badge.neg { background:rgba(224,82,82,0.1); color:#e05252; }
+  .manchete-badge.pos { background:rgba(82,201,122,0.1); color:#52c97a; }
+  .manchete-badge.neu { background:rgba(255,255,255,0.05); color:var(--muted); }
+  .manchete-text h4 { font-size:.82rem; font-weight:500; color:var(--text); margin-bottom:2px; }
+  .manchete-text p  { font-size:.73rem; color:var(--muted); line-height:1.5; }
+
+  /* ── RETROSPECTIVA ── */
+  .retro-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(108px,1fr)); gap:8px; }
+  .ret { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:.8rem; text-align:center; }
+  .ret-d { font-size:.65rem; color:var(--faint); margin-bottom:3px; }
+  .ret-v { font-size:.78rem; font-weight:500; color:var(--text); }
+  .ret-r { font-size:.7rem; margin-top:3px; font-weight:500; }
+  .ret-r.ok { color:#52c97a; }
+  .ret-r.no { color:#e05252; }
+  .ret.acertou { border-color:rgba(82,201,122,0.25); background:rgba(82,201,122,0.05); }
+  .ret.errou   { border-color:rgba(224,82,82,0.15); }
+
+  /* ── IMPACTO ── */
+  .impacto-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:2rem; }
+  @media(max-width:600px){ .impacto-grid { grid-template-columns:1fr; } }
+  .imp { background:var(--card); border:1px solid var(--border); border-top:2px solid var(--green-dark); border-radius:14px; padding:1.5rem; text-align:center; }
+  .imp-val { font-family:'Syne',sans-serif; font-size:2.2rem; font-weight:800; color:var(--green-mid); line-height:1; margin-bottom:.4rem; }
+  .imp-lbl { font-size:.76rem; color:var(--text); line-height:1.4; }
+  .imp-detail { font-size:.68rem; color:var(--faint); margin-top:4px; }
+
+  .resultado-blocos { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:600px){ .resultado-blocos { grid-template-columns:1fr; } }
+  .res-bloco { background:var(--card); border:1px solid var(--border); border-left:2px solid var(--green-dark); border-radius:14px; padding:1.4rem; transition:border-left-color 0.2s; }
+  .res-bloco:hover { border-left-color:var(--green); }
+  .res-bloco h3 { font-family:'Syne',sans-serif; font-size:.9rem; font-weight:700; color:var(--text); margin-bottom:.45rem; }
+  .res-bloco p  { font-size:.79rem; color:var(--muted); line-height:1.65; }
+
+  .disclaimer { background:rgba(212,148,58,0.1); border-left:2px solid #d4943a; border-radius:0 10px 10px 0; padding:.85rem 1.2rem; margin-top:2rem; }
+  .disclaimer p { font-size:.75rem; color:#d4943a; line-height:1.55; font-style:italic; }
+
+  code { font-size:11px; background:var(--bg4); border:1px solid var(--border); padding:1px 6px; border-radius:4px; color:var(--green-mid); font-family:monospace; }
+
+  /* ── FOOTER ── */
+  footer { background:var(--bg2); border-top:1px solid var(--border); padding:3rem 2rem; text-align:center; }
+  .ft-logo { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--text); margin-bottom:.4rem; }
+  .ft-logo span { color:var(--green-mid); }
+  footer p { font-size:.72rem; color:var(--faint); margin-top:.25rem; }
+  .ft-badge { display:inline-block; margin-top:1.2rem; background:rgba(45,189,138,0.1); border:1px solid rgba(45,189,138,0.2); color:var(--green-mid); font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:5px 16px; border-radius:20px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Viés <span>Ibovespa</span> Diário</div>
+  <div class="nav-links">
+    <a href="#problema">Problema</a>
+    <a href="#solucao">Solução</a>
+    <a href="#output">Output Real</a>
+    <a href="#resultado">Resultado</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🏆 Candidato ao Prêmio — Melhor Uso do Claude</div>
+    <h1>Viés do <em>Ibovespa</em><br>Diário</h1>
+    <p class="hero-lead">Um relatório PDF gerado automaticamente pelo Cowork toda noite — entregando leitura qualitativa e quantitativa do mercado antes de cada pregão, sem nenhuma intervenção manual.</p>
+    <div class="hero-kpis">
+      <div class="kpi"><div class="kpi-val">PDF</div><div class="kpi-lbl">saída gerada</div></div>
+      <div class="kpi"><div class="kpi-val">21h45</div><div class="kpi-lbl">todo dia útil</div></div>
+      <div class="kpi"><div class="kpi-val">0</div><div class="kpi-lbl">cliques manuais</div></div>
+      <div class="kpi"><div class="kpi-val">10+</div><div class="kpi-lbl">fontes analisadas</div></div>
+      <div class="kpi"><div class="kpi-val">Cowork</div><div class="kpi-lbl">motor de execução</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMA -->
+<section id="problema">
+  <div class="container">
+    <div class="sec-label">01 — O Problema</div>
+    <h2 class="sec-title">Informação existe.<br><em>Inteligência sobre ela é cara.</em></h2>
+    <p class="sec-desc">Todo dia útil, antes de qualquer decisão de investimento, era necessário garimpar manualmente dezenas de fontes dispersas para entender o humor do mercado.</p>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">⏱️</div><h3>Tempo perdido</h3><p>30 a 45 minutos por dia pesquisando Money Times, InfoMoney, CNN Brasil, Seu Dinheiro e TradingView — sem método, sem estrutura.</p></div>
+      <div class="card"><div class="card-icon">📊</div><h3>Dados sem contexto</h3><p>Números isolados não dizem nada. Saber que o Ibovespa caiu 2% não explica se amanhã vai cair mais — ou se é hora de comprar.</p></div>
+      <div class="card"><div class="card-icon">🎲</div><h3>Decisões sob pressão</h3><p>Sem preparo estruturado, as decisões no pregão ficavam expostas a ruído, emoção e falta de contexto macro e setorial.</p></div>
+      <div class="card"><div class="card-icon">🔁</div><h3>Processo repetitivo</h3><p>A mesma rotina de coleta, leitura e síntese se repetia todo dia útil — trabalho manual que um agente de IA faz melhor.</p></div>
+      <div class="card full"><div class="card-icon">💡</div><h3>O problema central</h3><p>Informação existe em abundância, mas inteligência estruturada sobre ela é escassa e muito cara de produzir manualmente. O mercado não espera — você precisava de um sistema que trabalhasse enquanto dormia.</p></div>
+    </div>
+    <div class="quote-block">
+      <p>"O investidor que chega ao pregão sem preparo não toma decisões — reage. E reagir ao ruído do mercado é o caminho mais rápido para o prejuízo."</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUÇÃO -->
+<section id="solucao" class="alt">
+  <div class="container">
+    <div class="sec-label">02 — A Solução</div>
+    <h2 class="sec-title">Automatizar com <em>inteligência real</em></h2>
+    <p class="sec-desc">O Viés do Ibovespa Diário foi construído usando o Cowork, ferramenta da Anthropic para automação no desktop, com Claude como motor de análise.</p>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-arr">→</div><div class="flow-n">01</div><h3>Cowork executa</h3><p>O agente Cowork dispara automaticamente após o fechamento do pregão da B3.</p></div>
+      <div class="flow-step"><div class="flow-arr">→</div><div class="flow-n">02</div><h3>Claude coleta</h3><p>Varre 10+ fontes: Money Times, InfoMoney, CNN Brasil, Seu Dinheiro, TradingView.</p></div>
+      <div class="flow-step"><div class="flow-arr">→</div><div class="flow-n">03</div><h3>Análise ponderada</h3><p>Cada manchete classificada como POS, NEG ou NEU. Pesos aplicados. Antifade ativado.</p></div>
+      <div class="flow-step"><div class="flow-n">04</div><h3>PDF gerado</h3><p>Relatório completo salvo em <code>D:\Claude\ClaudeViesBovespa\</code></p></div>
+    </div>
+    <div class="card-grid" style="margin-bottom:1.5rem;">
+      <div class="card"><div class="card-icon">⚖️</div><h3>Classificação POS / NEG / NEU</h3><p>Cada manchete recebe um viés com canal de transmissão explicado — por que aquela notícia importa para o Ibovespa e com qual intensidade.</p></div>
+      <div class="card"><div class="card-icon">🔇</div><h3>Lógica antifade</h3><p>Quando Wall Street está em alta mas o Ibovespa cai, o modelo reduz automaticamente o peso de NY pela metade no cálculo do viés.</p></div>
+      <div class="card"><div class="card-icon">📉</div><h3>Contagem líquida de sinais</h3><p>Todos os sinais são somados algebricamente. Resultado mapeia para a escala 1–5. Ex: -2,5 → Viés 2 (Leve Baixa).</p></div>
+      <div class="card"><div class="card-icon">🔄</div><h3>Auto-calibração</h3><p>A retrospectiva automática detecta viés sistemático (como altismo recorrente) e aplica correção de calibração para o pregão seguinte.</p></div>
+    </div>
+    <div class="tech-pills">
+      <span class="tp"><strong>Cowork</strong> — Anthropic</span>
+      <span class="tp"><strong>Claude</strong> — análise e geração</span>
+      <span class="tp"><strong>Python</strong> — automação</span>
+      <span class="tp"><strong>PDF</strong> — output final</span>
+      <span class="tp"><strong>B3 / Ibovespa</strong> — mercado alvo</span>
+      <span class="tp"><strong>10+ fontes</strong> — coleta de dados</span>
+    </div>
+  </div>
+</section>
+
+<!-- OUTPUT REAL -->
+<section id="output">
+  <div class="container">
+    <div class="sec-label">03 — Output Real</div>
+    <h2 class="sec-title">O relatório de <em>08 de maio de 2026</em></h2>
+    <p class="sec-desc">Exemplo real gerado pelo sistema. O PDF contém 6 seções estruturadas, todas produzidas automaticamente pelo Cowork + Claude.</p>
+
+    <div class="vies-showcase">
+      <div class="vies-num">2</div>
+      <div class="vies-info">
+        <div class="vies-title">Leve Baixa — viés para o pregão</div>
+        <div class="vies-why">Ibovespa fechou -2,38% na quinta (183.218 pts). Pressão em PETR, VALE e bancos. Bradesco acima do esperado mas caiu — "sell the news". Antifade aplicado em Wall Street. Contagem líquida de sinais: -2,5. Wildcard: Payroll EUA às 10h30 BRT.</div>
+        <div class="escala">
+          <span class="es off">1 — Baixa</span>
+          <span class="es on">2 — Leve Baixa ✓</span>
+          <span class="es off">3 — Neutro</span>
+          <span class="es off">4 — Leve Alta</span>
+          <span class="es off">5 — Alta</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.9rem;color:var(--text)">Painel de ativos — fechamento 07/05/2026</h3>
+    <table class="ativos-table" style="margin-bottom:2rem;">
+      <thead><tr><th>Ativo</th><th>Valor</th><th>Variação / Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Ibovespa</td><td><strong>183.218 pts</strong></td><td class="neg">-2,38% no dia | acumulado 3 pregões: -1,26%</td></tr>
+        <tr><td>Dólar / Real</td><td><strong>R$ 4,92</strong></td><td class="neu">Estável; próximo de mínimas em 2 anos</td></tr>
+        <tr><td>Ouro (XAU/USD)</td><td><strong>~US$ 4.700/oz</strong></td><td class="neu">Ainda elevado; busca por hedge persiste</td></tr>
+        <tr><td>Petróleo Brent</td><td><strong>~US$ 98/bbl</strong></td><td class="neg">-3% no dia; expectativa de acordo EUA-Irã</td></tr>
+        <tr><td>Minério de Ferro</td><td><strong>~US$ 108/ton</strong></td><td class="pos">Firme; demanda chinesa pós-feriado</td></tr>
+        <tr><td>S&P 500</td><td><strong>Máxima histórica</strong></td><td class="pos">Novo recorde; Nasdaq também em máxima</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.9rem;color:var(--text)">Manchetes classificadas com canal de transmissão</h3>
+    <div class="manchete-list" style="margin-bottom:2rem;">
+      <div class="manchete"><span class="manchete-badge neg">NEG</span><div class="manchete-text"><h4>Ibovespa tomba 2,38% pressionado por Bradesco, Itaú, Santander, Petrobras e Vale</h4><p>Queda concentrada em blue chips que somam ~40% do índice. Momentum vendedor forte para arrastar início do pregão seguinte.</p></div></div>
+      <div class="manchete"><span class="manchete-badge neg">NEG</span><div class="manchete-text"><h4>Bradesco lucrou R$6,81 bi (+16,1%) acima do esperado, mas ação caiu na B3</h4><p>"Sell the news" clássico. PDD +26,5% gerou ruído. Sinal de fluxo vendedor estrutural no setor bancário.</p></div></div>
+      <div class="manchete"><span class="manchete-badge pos">POS</span><div class="manchete-text"><h4>Totvs (TOTS3) +9,46% após balanço forte da divisão Gestão</h4><p>Maior alta do índice. Sinal seletivo: há empresas entregando bons números. Pode atrair fluxo defensivo.</p></div></div>
+      <div class="manchete"><span class="manchete-badge neg">NEG</span><div class="manchete-text"><h4>Brent cai ~3% para US$98/bbl com avanço nas negociações EUA-Irã</h4><p>Petrobras representa 13% do índice. Pressão contínua sobre o principal papel do Ibovespa.</p></div></div>
+      <div class="manchete"><span class="manchete-badge neu">NEU</span><div class="manchete-text"><h4>S&P 500 e Nasdaq em novas máximas históricas com força de techs e IA</h4><p>Vento externo positivo, mas antifade aplicado: peso reduzido pela metade pois o Ibovespa caiu mesmo com NY em alta.</p></div></div>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.9rem;color:var(--text)">Retrospectiva automática — viés previsto vs. real</h3>
+    <div class="retro-grid" style="margin-bottom:.8rem;">
+      <div class="ret errou"><div class="ret-d">07/05 Qui</div><div class="ret-v">4 Leve Alta</div><div class="ret-r no">-2,38% ✗</div></div>
+      <div class="ret acertou"><div class="ret-d">06/05 Qua</div><div class="ret-v">4 Leve Alta</div><div class="ret-r ok">+0,50% ✓</div></div>
+      <div class="ret errou"><div class="ret-d">05/05 Ter</div><div class="ret-v">3 Neutro</div><div class="ret-r no">+0,62% ✗</div></div>
+      <div class="ret errou"><div class="ret-d">04/05 Seg</div><div class="ret-v">4 Leve Alta</div><div class="ret-r no">-0,92% ✗</div></div>
+      <div class="ret errou"><div class="ret-d">30/04 Qui</div><div class="ret-v">2 Leve Baixa</div><div class="ret-r no">+1,39% ✗</div></div>
+      <div class="ret acertou"><div class="ret-d">24/04 Sex</div><div class="ret-v">2 Leve Baixa</div><div class="ret-r ok">-0,33% ✓</div></div>
+    </div>
+    <p style="font-size:.73rem;color:var(--muted);line-height:1.55;">A retrospectiva é gerada automaticamente no PDF. O modelo registra seus erros publicamente, detecta viés sistemático e aplica correção de calibração. Transparência total.</p>
+    <div class="disclaimer"><p>Este material não é recomendação de investimento. É uma leitura qualitativa do cenário baseada em notícias públicas. Decisões de alocação são responsabilidade do leitor.</p></div>
+  </div>
+</section>
+
+<!-- RESULTADO -->
+<section id="resultado" class="alt">
+  <div class="container">
+    <div class="sec-label">04 — O Resultado</div>
+    <h2 class="sec-title">O que <em>mudou de verdade</em></h2>
+    <p class="sec-desc">Três camadas de impacto: tempo, qualidade de decisão e mudança de comportamento como investidor.</p>
+    <div class="impacto-grid">
+      <div class="imp"><div class="imp-val">+100h</div><div class="imp-lbl">economizadas por ano</div><div class="imp-detail">~30 min/dia × 260 pregões</div></div>
+      <div class="imp"><div class="imp-val">2 min</div><div class="imp-lbl">para ler o briefing</div><div class="imp-detail">vs. 45 min de pesquisa manual</div></div>
+      <div class="imp"><div class="imp-val">10+</div><div class="imp-lbl">fontes consolidadas</div><div class="imp-detail">num único PDF estruturado</div></div>
+    </div>
+    <div class="resultado-blocos">
+      <div class="res-bloco"><h3>⏱️ Impacto de tempo</h3><p>O que levava 30 a 45 minutos de pesquisa manual dispersa virou leitura de 2 minutos. Multiplicado pelos ~260 pregões anuais, são mais de 100 horas economizadas por ano.</p></div>
+      <div class="res-bloco"><h3>🧠 Qualidade da decisão</h3><p>Você chega ao pregão com um diagnóstico estruturado — não uma opinião, mas um modelo com raciocínio documentado, fontes referenciadas e histórico de acertos visível.</p></div>
+      <div class="res-bloco"><h3>🎯 Mudança de comportamento</h3><p>De investidor reativo para investidor preparado — que chega ao pregão sabendo exatamente o que monitorar: futuros, ADRs, Brent, câmbio, payroll.</p></div>
+      <div class="res-bloco"><h3>🔍 Transparência radical</h3><p>O sistema mostra todo o raciocínio: cada manchete classificada, cada peso aplicado, cada ajuste de calibração. Nenhuma caixa preta.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-logo">Viés <span>Ibovespa</span> Diário</div>
+  <p>Gerado pelo Cowork · Anthropic · pasta local D:\Claude\ClaudeViesBovespa\</p>
+  <p>Exemplo real: 07/05/2026 às 21h45 — execução Cowork + Claude</p>
+  <div class="ft-badge">🏆 Candidato ao Prêmio — Melhor Uso do Claude</div>
+</footer>
+
+</body>
+</html>
