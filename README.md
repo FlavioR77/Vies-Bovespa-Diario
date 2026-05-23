@@ -162,7 +162,7 @@ O sistema entrega um diagnóstico estruturado — não uma opinião, mas um **mo
 
 ## 👤 Autor
 
-**Flavio Molinari**
+**Flavio Renan Sant Anna**
 Projeto pessoal de automação financeira com Claude + Cowork (Anthropic).
 
 ---
