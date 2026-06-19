@@ -4,7 +4,7 @@
 
 ---
 
-## 🏆 Projeto candidato ao prêmio — Melhor Uso do Claude
+## 🏆 Projeto Candidato ao Prêmio — Melhor Uso do Claude
 
 ---
 
